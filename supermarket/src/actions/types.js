@@ -1,0 +1,3 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const SHOP_LOADING = "SHOP_LOADING";
+export const SET_CURRENT_SHOP = "SET_CURRENT_SHOP";
