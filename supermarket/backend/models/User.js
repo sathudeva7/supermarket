@@ -1,27 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 // Create Schema
-const productSchema = new Schema({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: true
   },
-  description: {
+  email: {
     type: String,
     required: true
   },
-  price: {
+  password: {
     type: String,
     required: true
   },
-  shopname: {
+  phoneno: {
     type: String,
-    required: true
-  },
-
-  
- 
+    required:true
+  }
 });
-
-
-module.exports = Product = mongoose.model("products", productSchema);
+module.exports = User = mongoose.model("users", UserSchema);

@@ -21,13 +21,14 @@ class Dashboard extends Component {
         this.onChangeName = this.onChangeName.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangePrice = this.onChangePrice.bind(this);
-        
+        this.onFileChange = this.onFileChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
  
         this.state = {
             name: '',
             description: '',
             price:'',
+            file: null,
             shops: []
         }
     }
@@ -36,6 +37,12 @@ class Dashboard extends Component {
             name: e.target.value
         });
     }
+    
+    onFileChange(e){
+      this.setState({file:e.target.files});
+
+    }
+
  
     onChangeDescription(e){
      this.setState({
@@ -49,7 +56,13 @@ class Dashboard extends Component {
         }
         onSubmit(e) {
             e.preventDefault();
-    
+            const formData = new FormData();
+            const config = {
+              headers: {
+                  'content-type': 'multipart/form-data'
+              }
+          };
+            formData.append('myfile',this.state.file);
             const product = {
                 name: this.state.name,
                 description: this.state.description,
@@ -67,6 +80,11 @@ class Dashboard extends Component {
                 description:'',
                 price:''
             })
+            axios.post("http://localhost:5000/products/upload",formData,config)
+          .then((response) => {
+              alert("The file is successfully uploaded");
+          }).catch((error) => {
+      });
         }
 
   onLogoutClick = e => {
@@ -83,7 +101,7 @@ return (
         <div className="row">
           <div className="col s12 center-align">
             <h4>
-              <b>Hey there,</b><div id="demo"> {shop.name.split(" ")[0]}</div>
+              <b>Hey there,</b><div id="demo"> {shop.name}</div>
               
             </h4>
             <div className="container">
@@ -92,6 +110,13 @@ return (
           <div className="col s8 offset-s2">
             
             <form noValidate onSubmit={this.onSubmit}>
+      
+                        <div className="form-group">
+                            <input type="file" onChange={this.onFileChange} />
+                            
+                        </div>
+                        
+                    
               <div className="input-field col s12">
                 <input
                   onChange={this.onChangeName}

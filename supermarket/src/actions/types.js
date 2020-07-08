@@ -1,3 +1,5 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const SHOP_LOADING = "SHOP_LOADING";
 export const SET_CURRENT_SHOP = "SET_CURRENT_SHOP";
+export const USER_LOADING = "USER_LOADING";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";

@@ -19,4 +19,4 @@ const ShopSchema = new Schema({
     required: true
   }
 });
-module.exports = User = mongoose.model("shops", ShopSchema);
+module.exports = Shop = mongoose.model("shops", ShopSchema);

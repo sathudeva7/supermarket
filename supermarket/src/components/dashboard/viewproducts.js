@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import CardDeck from 'react-bootstrap/CardDeck'
 import Background from '../images/a.jpg';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 var sectionStyle = {
-    width: "100%",
-    height: "600px",
+    backgroundsize: "cover",   
+    
     backgroundImage: `url(${Background})`
   };
 
@@ -41,32 +45,62 @@ export default class Viewproducts extends Component {
     displayBlogPost = (posts) => {
         if(!posts.length) return null;
 
+
+        
+
         return posts.map((post,index)=> (
-            <div key={index}>
-            <Card>
-        <Card.Header as="h5">posted by {post.shopname}</Card.Header>
+            <Container>
+                <Col lg={6} md={8} xs={1} >
+                <div className="row">
+                 <div className="col s12 center-align">
+                <div className="col s4">
+                <div key={index}>
+              
+                <Card style={{ width: '18rem' }}>
+                <Card.Header as="h5">posted by {post.shopname}</Card.Header>
+  <Card.Img variant="top" src="holder.js/100px180" />
   <Card.Body>
-        <Card.Title>{post.name}</Card.Title>
+    <Card.Title>{post.name}</Card.Title>
     <Card.Text>
-      {post.description}<br></br>{post.price}
+    {post.description}<br></br>{post.price}
     </Card.Text>
-    
-    <Button variant="primary">Buy</Button>
+    <Button variant="primary">Go somewhere</Button>
   </Card.Body>
 </Card>
-
+             
 
 </div>
+
+                    </div>
+                </div>
+            </div>
+            </Col>
+               
+            </Container>
+            
+            
         ));
     };
+
+
 
     render(){
         console.log('State',this.state);
         return (
+            
             <section style={ sectionStyle }>
-            <div><br></br><br></br> {this.displayBlogPost(this.state.posts)}  </div>
+                <Col>
+
+                <div>{this.displayBlogPost(this.state.posts)}  </div>
+                </Col>
+               
+                  
+            
        </section>
         )
     }
 }
+
+
+
 

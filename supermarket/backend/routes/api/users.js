@@ -4,23 +4,23 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 // Load input validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
-// Load Shop model
-const Shop = require("../../models/Shop");
+const validateRegisterInput = require("../../validation/registeruser");
+const validateLoginInput = require("../../validation/loginuser");
+// Load User model
+const User = require("../../models/User");
 
-router.post("/register", (req, res) => {
+router.post("/registeruser", (req, res) => {
     // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
   // Check validation
     if (!isValid) {
       return res.status(400).json(errors);
     }
-  Shop.findOne({ email: req.body.email }).then(shop => {
-      if (shop) {
+  User.findOne({ email: req.body.email }).then(user => {
+      if (user) {
         return res.status(400).json({ email: "Email already exists" });
       } else {
-        const newShop = new Shop({
+        const newUser = new User({
           name: req.body.name,
           email: req.body.email,
           password: req.body.password,
@@ -28,12 +28,12 @@ router.post("/register", (req, res) => {
         });
   // Hash password before saving in database
         bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newShop.password, salt, (err, hash) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
-            newShop.password = hash;
-            newShop
+            newUser.password = hash;
+            newUser
               .save()
-              .then(shop => res.json(shop))
+              .then(user => res.json(user))
               .catch(err => console.log(err));
           });
         });
@@ -41,7 +41,7 @@ router.post("/register", (req, res) => {
     });
   });
 
-  router.post("/login", (req, res) => {
+  router.post("/loginuser", (req, res) => {
     // Form validation
   const { errors, isValid } = validateLoginInput(req.body);
   // Check validation
@@ -50,28 +50,27 @@ router.post("/register", (req, res) => {
     }
   const email = req.body.email;
     const password = req.body.password;
-  // Find shop by email
-    Shop.findOne({ email }).then(shop => {
-      // Check if shop exists
-      if (!shop) {
+  // Find user by email
+    User.findOne({ email }).then(user => {
+      // Check if user exists
+      if (!user) {
         return res.status(404).json({ emailnotfound: "Email not found" });
       }
   // Check password
-      bcrypt.compare(password, shop.password).then(isMatch => {
+      bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
-          // shop matched
+          // User matched
           // Create JWT Payload
           const payload = {
-            id: shop.id,
-            name: shop.name
+            id: user.id,
+            name: user.name
           };
   // Sign token
           jwt.sign(
             payload,
             keys.secretOrKey,
             {
-              expiresIn: 3600// 1 hr in seconds
-             
+              expiresIn: 3600 // 1 hr in seconds
             },
             (err, token) => {
               res.json({
@@ -80,7 +79,6 @@ router.post("/register", (req, res) => {
               });
             }
           );
-        
         } else {
           return res
             .status(400)
@@ -89,5 +87,5 @@ router.post("/register", (req, res) => {
       });
     });
   });
-  
+
   module.exports = router;
